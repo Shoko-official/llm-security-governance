@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SecurityPolicySchema",
+  "description": "Schema for LLM security execution policy rules.",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Policy version."
+    },
+    "denied_tool_prefixes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Prefixes of tools that are unconditionally blocked."
+    },
+    "denied_commands": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "System command prefixes that are blocked in execute/shell tools."
+    },
+    "prompt_injection_patterns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Regex patterns to block in incoming user prompts to prevent injection."
+    }
+  },
+  "required": ["version", "denied_tool_prefixes", "denied_commands", "prompt_injection_patterns"],
+  "additionalProperties": false
+}
