@@ -20,10 +20,13 @@ REQUIRED_FILES = [
     "docs/README.md",
     "figures/README.md",
     "security/README.md",
+    "security/mock_policy.json",
+    "security/mock_risk_taxonomy.json",
     "security/schemas/policy.json",
     "security/schemas/risk_taxonomy.json",
     "scripts/validate_repo.py",
     "scripts/validate_security.py",
+    "scripts/generate_mock_data.py",
     "tests/README.md",
 ]
 

@@ -1,0 +1,21 @@
+{
+  "version": "1.0.0",
+  "denied_tool_prefixes": [
+    "system",
+    "unsafe_execute",
+    "file_delete"
+  ],
+  "denied_commands": [
+    "rm -rf",
+    "format",
+    "sh",
+    "bash",
+    "powershell"
+  ],
+  "prompt_injection_patterns": [
+    "ignore previous instructions",
+    "system override",
+    "you are now in developer mode",
+    "jailbreak"
+  ]
+}
