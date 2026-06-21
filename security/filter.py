@@ -54,7 +54,8 @@ class SecurityFilter:
         if arguments:
             for key, val in arguments.items():
                 if isinstance(val, str):
-                    if key.lower() in {"command", "cmd", "command_line", "args"}:
+                    key_lower = key.lower()
+                    if any(k in key_lower for k in {"command", "cmd", "args", "arg", "line"}):
                         if not self.is_command_allowed(val):
                             return False
                     if not self.is_prompt_safe(val):
