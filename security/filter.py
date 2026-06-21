@@ -37,10 +37,33 @@ class SecurityFilter:
         return True
 
     def is_prompt_safe(self, prompt: str) -> bool:
-        """Check if prompt contains any prompt injection pattern."""
+        """Check if prompt contains any prompt injection pattern (including base64 encoding)."""
+        # 1. Normal scan
         for pattern in self.prompt_injection_patterns:
             if pattern.search(prompt):
                 return False
+                
+        # 2. Base64 scan: find potential base64 substrings and scan them
+        import base64
+        b64_pattern = re.compile(r'\b[A-Za-z0-9+/]{8,}=*\b')
+        for match in b64_pattern.finditer(prompt):
+            try:
+                decoded = base64.b64decode(match.group(0)).decode("utf-8", errors="ignore")
+                for pattern in self.prompt_injection_patterns:
+                    if pattern.search(decoded):
+                        return False
+            except Exception:
+                pass
+                
+        # 3. Adversarial framing patterns
+        framing_patterns = [
+            r"\[system\b", r"\bsystem\s*:\s*", r"\buser\s*:\s*", r"\bassistant\s*:\s*",
+            r"roleplay\b", r"pretend you are", r"assume the role of"
+        ]
+        for fp in framing_patterns:
+            if re.search(fp, prompt, re.IGNORECASE):
+                return False
+
         return True
 
     def check_tool_call(self, tool_name: str, arguments: Optional[Dict[str, Any]] = None) -> bool:
