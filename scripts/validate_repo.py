@@ -133,6 +133,10 @@ def run_validate() -> None:
     res = subprocess.run([sys.executable, str(ROOT / "scripts" / "validate_security.py")], capture_output=True, text=True)
     if res.returncode != 0:
         fail(f"Security validation failed:\n{res.stderr}\n{res.stdout}")
+    # Verify CLI script compiles and runs
+    res = subprocess.run([sys.executable, str(ROOT / "scripts" / "check_policy.py"), "--help"], capture_output=True, text=True)
+    if res.returncode != 0:
+        fail(f"Policy CLI verification failed:\n{res.stderr}\n{res.stdout}")
 
 
 def run_lint() -> None:
