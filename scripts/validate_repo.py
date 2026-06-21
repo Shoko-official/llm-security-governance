@@ -23,6 +23,7 @@ REQUIRED_FILES = [
     "security/schemas/policy.json",
     "security/schemas/risk_taxonomy.json",
     "scripts/validate_repo.py",
+    "scripts/validate_security.py",
     "tests/README.md",
 ]
 
@@ -120,6 +121,11 @@ def lint_text() -> None:
 def run_validate() -> None:
     validate_required_paths()
     validate_foundation_markers()
+    # Validate security governance files
+    import subprocess
+    res = subprocess.run([sys.executable, str(ROOT / "scripts" / "validate_security.py")], capture_output=True, text=True)
+    if res.returncode != 0:
+        fail(f"Security validation failed:\n{res.stderr}\n{res.stdout}")
 
 
 def run_lint() -> None:
