@@ -28,6 +28,7 @@ REQUIRED_FILES = [
     "scripts/validate_repo.py",
     "scripts/validate_security.py",
     "scripts/generate_mock_data.py",
+    "scripts/check_policy.py",
     "tests/README.md",
     "tests/test_filter.py",
     "tests/test_schemas.py",
