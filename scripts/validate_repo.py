@@ -33,6 +33,7 @@ REQUIRED_FILES = [
     "scripts/check_policy.py",
     "tests/README.md",
     "tests/test_filter.py",
+    "tests/test_injection.py",
     "tests/test_schemas.py",
 ]
 
