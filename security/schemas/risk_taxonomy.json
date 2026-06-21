@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RiskTaxonomySchema",
+  "description": "Schema for classifying security risks and severity levels.",
+  "type": "object",
+  "properties": {
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^RISK-[0-9]{3}$",
+            "description": "Unique risk identifier."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the risk category."
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "critical"],
+            "description": "Assigned severity level."
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed explanation of the risk vector."
+          }
+        },
+        "required": ["id", "name", "severity", "description"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["risks"],
+  "additionalProperties": false
+}

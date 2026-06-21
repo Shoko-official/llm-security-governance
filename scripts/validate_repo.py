@@ -20,6 +20,8 @@ REQUIRED_FILES = [
     "docs/README.md",
     "figures/README.md",
     "security/README.md",
+    "security/schemas/policy.json",
+    "security/schemas/risk_taxonomy.json",
     "scripts/validate_repo.py",
     "tests/README.md",
 ]
