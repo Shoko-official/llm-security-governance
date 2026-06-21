@@ -43,9 +43,8 @@ class SecurityFilter:
             if pattern.search(prompt):
                 return False
                 
-        # 2. Base64 scan: find potential base64 substrings and scan them
         import base64
-        b64_pattern = re.compile(r'\b[A-Za-z0-9+/]{8,}=*\b')
+        b64_pattern = re.compile(r'[A-Za-z0-9+/=]{8,}')
         for match in b64_pattern.finditer(prompt):
             try:
                 decoded = base64.b64decode(match.group(0)).decode("utf-8", errors="ignore")
