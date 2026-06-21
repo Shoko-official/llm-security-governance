@@ -1,0 +1,22 @@
+{
+  "risks": [
+    {
+      "id": "RISK-001",
+      "name": "Prompt Injection",
+      "severity": "high",
+      "description": "User prompts that override system instructions or modify safety guards."
+    },
+    {
+      "id": "RISK-002",
+      "name": "Unsafe Command Execution",
+      "severity": "critical",
+      "description": "Execution of blocked system commands or files that modify the local workspace."
+    },
+    {
+      "id": "RISK-003",
+      "name": "Unauthorized Data Leak",
+      "severity": "medium",
+      "description": "Leak of api keys, credentials, or sensitive files in output responses."
+    }
+  ]
+}
