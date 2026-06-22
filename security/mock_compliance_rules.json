@@ -1,0 +1,12 @@
+{
+  "rule_id": "std-compliance-v1",
+  "description": "Standard regulatory compliance verification rules for enterprise LLM systems.",
+  "enforcement_level": "high",
+  "checks": {
+    "require_filter_active": true,
+    "allowed_false_positive_rate": 0.05,
+    "minimum_injection_block_rate": 0.95,
+    "require_command_blocking": true,
+    "require_tool_prefix_blocking": true
+  }
+}
