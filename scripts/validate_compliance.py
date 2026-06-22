@@ -47,6 +47,7 @@ def main() -> None:
     parser.add_argument("--policy", type=str, help="Path to security policy JSON file")
     parser.add_argument("--vectors", type=str, help="Path to prompt injection vectors JSON file")
     parser.add_argument("--report", type=str, help="Path to output compliance report JSON file")
+    parser.add_argument("--paper-dir", type=str, help="Path to paper repository root")
 
     args = parser.parse_args()
 
@@ -60,6 +61,7 @@ def main() -> None:
         Path(args.vectors) if args.vectors else ROOT / "security" / "mock_injection_vectors.json"
     )
     report_path = Path(args.report) if args.report else ROOT / "security" / "compliance_report.json"
+    paper_path = Path(args.paper_dir) if args.paper_dir else None
 
     # 1. Load and validate rules against schema
     rules = load_json(rules_path)
@@ -88,9 +90,12 @@ def main() -> None:
 
     results = []
 
+    sec_filter.reset_trace()
+
     for vec in vectors:
         prompt = vec.get("prompt", "")
         expected_safe = vec.get("expected_safe", True)
+        sec_filter.current_trace_id = None
         is_safe = sec_filter.is_prompt_safe(prompt)
 
         passed = True
@@ -179,12 +184,50 @@ def main() -> None:
     except Exception as e:
         print(f"Warning: Failed to save compliance report: {e}", file=sys.stderr)
 
+    # Export tracing spans to security/traces.json
+    traces_path = ROOT / "security" / "traces.json"
+    try:
+        with open(traces_path, "w", encoding="utf-8") as f:
+            json.dump(sec_filter.last_spans, f, indent=2)
+        print(f"Exported tracing spans to {traces_path.relative_to(ROOT)}")
+    except Exception as e:
+        print(f"Warning: Failed to export tracing spans: {e}", file=sys.stderr)
+
     # Report results
     print("\n--- Compliance Verification ---")
     print(f"Status:             {report['compliance_status']}")
     print(f"Injection Block:    {block_rate:.2%} (Target: >= {min_block_rate:.0%})")
     print(f"False Positive:     {false_positive_rate:.2%} (Target: <= {max_fpr:.0%})")
     print("--------------------------------")
+
+    if paper_path:
+        sec_file = paper_path / "sections" / "security-and-governance.md"
+        if sec_file.is_file():
+            status_str = f"**{report['compliance_status']}**"
+            stats_table = [
+                "| Metric | Value |",
+                "|---|---|",
+                f"| Compliance Status | {status_str} |",
+                f"| Total Prompts Checked | {len(vectors)} |",
+                f"| Injection Block Rate | {block_rate:.2%} (Target: >= {min_block_rate:.0%}) |",
+                f"| False Positive Rate | {false_positive_rate:.2%} (Target: <= {max_fpr:.0%}) |"
+            ]
+            table_content = "\n".join(stats_table)
+            
+            content = sec_file.read_text(encoding="utf-8")
+            start_tag = "<!-- COMPLIANCE_STATS_START -->"
+            end_tag = "<!-- COMPLIANCE_STATS_END -->"
+            
+            if start_tag in content and end_tag in content:
+                start_idx = content.find(start_tag) + len(start_tag)
+                end_idx = content.find(end_tag)
+                new_content = content[:start_idx] + "\n" + table_content + "\n" + content[end_idx:]
+                sec_file.write_text(new_content, encoding="utf-8")
+                print(f"Successfully exported compliance stats to {sec_file}")
+            else:
+                print("Warning: Compliance stats placeholders not found in paper security section.")
+        else:
+            print(f"Warning: Paper security file not found at {sec_file}")
 
     if not compliance_passed:
         fail(f"Compliance verification failed on: {', '.join(failed_checks)}")
