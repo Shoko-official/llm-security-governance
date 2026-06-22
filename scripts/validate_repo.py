@@ -26,6 +26,7 @@ REQUIRED_FILES = [
     "security/mock_injection_vectors.json",
     "security/mock_compliance_rules.json",
     "security/compliance_report.json",
+    "security/traces.json",
     "security/schemas/policy.json",
     "security/schemas/risk_taxonomy.json",
     "security/schemas/compliance_rules.json",

@@ -1,0 +1,128 @@
+[
+  {
+    "span_id": "18eda398f43f43f4",
+    "trace_id": "814433bfaa9244a893d778e875991e4b",
+    "parent_span_id": "N/A",
+    "name": "is_prompt_safe",
+    "start_time": "2026-06-22T18:40:56.950385Z",
+    "end_time": "2026-06-22T18:40:56.950385Z",
+    "duration_ms": 0.0,
+    "service_name": "security",
+    "status": "ok",
+    "attributes": {
+      "safe": true
+    }
+  },
+  {
+    "span_id": "2601477a50bf45dd",
+    "trace_id": "4764d94a372943a0a0574fdb835ac361",
+    "parent_span_id": "N/A",
+    "name": "is_prompt_safe",
+    "start_time": "2026-06-22T18:40:56.950385Z",
+    "end_time": "2026-06-22T18:40:56.950385Z",
+    "duration_ms": 0.0,
+    "service_name": "security",
+    "status": "ok",
+    "attributes": {
+      "safe": true
+    }
+  },
+  {
+    "span_id": "447fb820df4447b1",
+    "trace_id": "06a8c8b24b164b5c93f6a992cc3135d6",
+    "parent_span_id": "N/A",
+    "name": "is_prompt_safe",
+    "start_time": "2026-06-22T18:40:56.950385Z",
+    "end_time": "2026-06-22T18:40:56.950385Z",
+    "duration_ms": 0.0,
+    "service_name": "security",
+    "status": "ok",
+    "attributes": {
+      "safe": true
+    }
+  },
+  {
+    "span_id": "c71a4d9d775346f3",
+    "trace_id": "dfcd93b6f2ff450db79c7987dfd88d6a",
+    "parent_span_id": "N/A",
+    "name": "is_prompt_safe",
+    "start_time": "2026-06-22T18:40:56.950385Z",
+    "end_time": "2026-06-22T18:40:56.950385Z",
+    "duration_ms": 0.0,
+    "service_name": "security",
+    "status": "ok",
+    "attributes": {
+      "safe": false
+    }
+  },
+  {
+    "span_id": "782a61b602584b3d",
+    "trace_id": "c767658700aa4663bad4c2b41f068dac",
+    "parent_span_id": "N/A",
+    "name": "is_prompt_safe",
+    "start_time": "2026-06-22T18:40:56.950385Z",
+    "end_time": "2026-06-22T18:40:56.950385Z",
+    "duration_ms": 0.0,
+    "service_name": "security",
+    "status": "ok",
+    "attributes": {
+      "safe": false
+    }
+  },
+  {
+    "span_id": "81ee7567c91f45e5",
+    "trace_id": "b92563d827e54b188a57ce3a87ab94ba",
+    "parent_span_id": "N/A",
+    "name": "is_prompt_safe",
+    "start_time": "2026-06-22T18:40:56.950385Z",
+    "end_time": "2026-06-22T18:40:56.950385Z",
+    "duration_ms": 0.0,
+    "service_name": "security",
+    "status": "ok",
+    "attributes": {
+      "safe": false
+    }
+  },
+  {
+    "span_id": "3d86dd4e24044093",
+    "trace_id": "697195228bf04ae489b42eab6ff08048",
+    "parent_span_id": "N/A",
+    "name": "is_prompt_safe",
+    "start_time": "2026-06-22T18:40:56.950385Z",
+    "end_time": "2026-06-22T18:40:56.950385Z",
+    "duration_ms": 0.0,
+    "service_name": "security",
+    "status": "ok",
+    "attributes": {
+      "safe": false
+    }
+  },
+  {
+    "span_id": "fe4d3e8f32a14df8",
+    "trace_id": "287311237a614f309fbdf3304e27115d",
+    "parent_span_id": "N/A",
+    "name": "is_prompt_safe",
+    "start_time": "2026-06-22T18:40:56.950385Z",
+    "end_time": "2026-06-22T18:40:56.950385Z",
+    "duration_ms": 0.0,
+    "service_name": "security",
+    "status": "ok",
+    "attributes": {
+      "safe": false
+    }
+  },
+  {
+    "span_id": "abb700ccd8c5401e",
+    "trace_id": "b13fb5fc8313470c8258412c7e0b15c1",
+    "parent_span_id": "N/A",
+    "name": "is_prompt_safe",
+    "start_time": "2026-06-22T18:40:56.950385Z",
+    "end_time": "2026-06-22T18:40:56.950385Z",
+    "duration_ms": 0.0,
+    "service_name": "security",
+    "status": "ok",
+    "attributes": {
+      "safe": false
+    }
+  }
+]
