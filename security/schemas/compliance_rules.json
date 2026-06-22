@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ComplianceVerificationRulesSchema",
+  "description": "Schema for LLM security compliance verification rules.",
+  "type": "object",
+  "properties": {
+    "rule_id": {
+      "type": "string",
+      "description": "Unique identifier for the compliance rule."
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable description of this compliance rule."
+    },
+    "enforcement_level": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"],
+      "description": "Severity / enforcement level of compliance violations."
+    },
+    "checks": {
+      "type": "object",
+      "properties": {
+        "require_filter_active": {
+          "type": "boolean",
+          "description": "Whether safety filtration must be active."
+        },
+        "allowed_false_positive_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Maximum allowed false positive rate in injection detection tests."
+        },
+        "minimum_injection_block_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Minimum allowed block rate for simulated injection vectors."
+        },
+        "require_command_blocking": {
+          "type": "boolean",
+          "description": "Whether denied system command checks must be enabled."
+        },
+        "require_tool_prefix_blocking": {
+          "type": "boolean",
+          "description": "Whether denied tool checks must be enabled."
+        }
+      },
+      "required": [
+        "require_filter_active",
+        "allowed_false_positive_rate",
+        "minimum_injection_block_rate",
+        "require_command_blocking",
+        "require_tool_prefix_blocking"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "rule_id",
+    "description",
+    "enforcement_level",
+    "checks"
+  ],
+  "additionalProperties": false
+}

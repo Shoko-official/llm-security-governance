@@ -24,10 +24,14 @@ REQUIRED_FILES = [
     "security/mock_policy.json",
     "security/mock_risk_taxonomy.json",
     "security/mock_injection_vectors.json",
+    "security/mock_compliance_rules.json",
+    "security/compliance_report.json",
     "security/schemas/policy.json",
     "security/schemas/risk_taxonomy.json",
+    "security/schemas/compliance_rules.json",
     "scripts/validate_repo.py",
     "scripts/validate_security.py",
+    "scripts/validate_compliance.py",
     "scripts/generate_mock_data.py",
     "scripts/generate_injection_vectors.py",
     "scripts/check_policy.py",
@@ -35,6 +39,7 @@ REQUIRED_FILES = [
     "tests/test_filter.py",
     "tests/test_injection.py",
     "tests/test_schemas.py",
+    "tests/test_compliance.py",
 ]
 
 REQUIRED_DIRECTORIES = [
@@ -136,6 +141,10 @@ def run_validate() -> None:
     res = subprocess.run([sys.executable, str(ROOT / "scripts" / "validate_security.py")], capture_output=True, text=True)
     if res.returncode != 0:
         fail(f"Security validation failed:\n{res.stderr}\n{res.stdout}")
+    # Validate compliance rules and report
+    res = subprocess.run([sys.executable, str(ROOT / "scripts" / "validate_compliance.py")], capture_output=True, text=True)
+    if res.returncode != 0:
+        fail(f"Compliance validation failed:\n{res.stderr}\n{res.stdout}")
     # Verify CLI script compiles and runs
     res = subprocess.run([sys.executable, str(ROOT / "scripts" / "check_policy.py"), "--help"], capture_output=True, text=True)
     if res.returncode != 0:
