@@ -81,5 +81,119 @@ class TestSecuritySchemas(unittest.TestCase):
         with self.assertRaises(jsonschema.ValidationError):
             jsonschema.validate(instance=invalid_taxonomy_severity, schema=self.taxonomy_schema)
 
+    def test_mock_traces_valid(self):
+        from scripts.validate_security import validate_traces_file
+        traces_path = ROOT / "security" / "traces.json"
+        span_schema_path = ROOT.parent / "llm-systems-core" / "schemas" / "span.json"
+        # Should not raise any exception
+        validate_traces_file(traces_path, span_schema_path)
+
+    def test_invalid_traces_detection(self):
+        from scripts.validate_security import validate_traces_file, SecurityValidationError
+        import tempfile
+        
+        span_schema_path = ROOT.parent / "llm-systems-core" / "schemas" / "span.json"
+        
+        # 1. Invalid JSON structure (not list)
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            f.write('{"span_id": "123"}')
+            temp_name = Path(f.name)
+        try:
+            with self.assertRaises(SecurityValidationError):
+                validate_traces_file(temp_name, span_schema_path)
+        finally:
+            try:
+                temp_name.unlink()
+            except Exception:
+                pass
+            
+        # 2. Missing safe attribute in is_prompt_safe
+        invalid_trace_1 = [
+            {
+                "span_id": "43aaa323839141f7",
+                "trace_id": "7f0cd39a843b4d6286ab92b74fbcb421",
+                "parent_span_id": "N/A",
+                "name": "is_prompt_safe",
+                "start_time": "2026-06-25T22:12:34.349700Z",
+                "end_time": "2026-06-25T22:12:34.349700Z",
+                "duration_ms": 0.0,
+                "service_name": "security",
+                "status": "ok",
+                "attributes": {
+                    "scan_type": "input_prompt"
+                }
+            }
+        ]
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            json.dump(invalid_trace_1, f)
+            temp_name = Path(f.name)
+        try:
+            with self.assertRaises(SecurityValidationError) as ctx:
+                validate_traces_file(temp_name, span_schema_path)
+            self.assertIn("missing 'safe' attribute", str(ctx.exception))
+        finally:
+            try:
+                temp_name.unlink()
+            except Exception:
+                pass
+
+        # 3. Invalid safe type (not boolean)
+        invalid_trace_2 = [
+            {
+                "span_id": "43aaa323839141f7",
+                "trace_id": "7f0cd39a843b4d6286ab92b74fbcb421",
+                "parent_span_id": "N/A",
+                "name": "is_prompt_safe",
+                "start_time": "2026-06-25T22:12:34.349700Z",
+                "end_time": "2026-06-25T22:12:34.349700Z",
+                "duration_ms": 0.0,
+                "service_name": "security",
+                "status": "ok",
+                "attributes": {
+                    "safe": "yes"
+                }
+            }
+        ]
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            json.dump(invalid_trace_2, f)
+            temp_name = Path(f.name)
+        try:
+            with self.assertRaises(SecurityValidationError) as ctx:
+                validate_traces_file(temp_name, span_schema_path)
+            self.assertIn("'safe' attribute must be boolean", str(ctx.exception))
+        finally:
+            try:
+                temp_name.unlink()
+            except Exception:
+                pass
+            
+        # 4. Unknown security name span
+        invalid_trace_3 = [
+            {
+                "span_id": "43aaa323839141f7",
+                "trace_id": "7f0cd39a843b4d6286ab92b74fbcb421",
+                "parent_span_id": "N/A",
+                "name": "unknown_operation",
+                "start_time": "2026-06-25T22:12:34.349700Z",
+                "end_time": "2026-06-25T22:12:34.349700Z",
+                "duration_ms": 0.0,
+                "service_name": "security",
+                "status": "ok",
+                "attributes": {}
+            }
+        ]
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            json.dump(invalid_trace_3, f)
+            temp_name = Path(f.name)
+        try:
+            with self.assertRaises(SecurityValidationError) as ctx:
+                validate_traces_file(temp_name, span_schema_path)
+            self.assertIn("unknown name for security service", str(ctx.exception))
+        finally:
+            try:
+                temp_name.unlink()
+            except Exception:
+                pass
+
 if __name__ == "__main__":
     unittest.main()
